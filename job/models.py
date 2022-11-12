@@ -2,6 +2,12 @@ from django.db import models
 
 # Create your models here.
 
+class Category(models.Model):
+    name = models.CharField(max_length=35)
+
+    def __str__(self):
+        return self.name
+
 class Jobs(models.Model):
     fulltime = 'FT'
     parttime = 'PT'
@@ -11,6 +17,7 @@ class Jobs(models.Model):
     ]
     title = models.CharField(max_length=100)
     # Location
+    job_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     job_type = models.CharField(max_length=2,choices=job_type_choices,default=fulltime)
     description = models.TextField(max_length=500)
     pulished_at = models.DateTimeField(auto_now=True)
