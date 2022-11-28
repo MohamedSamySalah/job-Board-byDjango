@@ -8,6 +8,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+# def image_upload(instance, filename):
+#     filename, extension = filename.split(".")
+#     return "jobs/%s/%s.%s"%(instance.id,instance.id,extension)
+
 class Jobs(models.Model):
     fulltime = 'FT'
     parttime = 'PT'
@@ -24,6 +28,8 @@ class Jobs(models.Model):
     vecancy = models.IntegerField(default = 1)
     salary = models.DecimalField(decimal_places=3,max_digits=8,default=1.1)
     experience = models.IntegerField(default=1)
+    image = models.ImageField(upload_to='media/jobs')
+    # image = models.ImageField(upload_to=image_upload)
 
     def __str__(self) :
         return self.title
