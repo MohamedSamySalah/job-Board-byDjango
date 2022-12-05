@@ -1,5 +1,5 @@
 from django.db import models
-
+ 
 # Create your models here.
 
 class Category(models.Model):
@@ -11,7 +11,7 @@ class Category(models.Model):
 # def image_upload(instance, filename):
 #     filename, extension = filename.split(".")
 #     return "jobs/%s/%s.%s"%(instance.id,instance.id,extension)
-
+0
 class Jobs(models.Model):
     fulltime = 'FT'
     parttime = 'PT'
@@ -30,6 +30,23 @@ class Jobs(models.Model):
     experience = models.IntegerField(default=1)
     image = models.ImageField(upload_to='media/jobs')
     # image = models.ImageField(upload_to=image_upload)
+    slug = models.SlugField(blank=True, null=True)
 
+
+    def save(self,*args,**kwargs):
+        self.slug = slugify(self.title)
+
+        super(Jobs,self).save(*args,**kwargs)
     def __str__(self) :
         return self.title
+
+class Apllyjob(models.Model):
+    job = models.ForeignKey(Jobs,on_delete=models.CASCADE)
+    name = models.CharField(max_length=35)
+    email = models.EmailField(max_length=60)
+    website = models.URLField()
+    cv = models.FileField(upload_to='files/')
+    cover_letter = models.TextField(max_length=255)
+
+    def __str__(self):
+        return self.name +' -- '+ self.job.title

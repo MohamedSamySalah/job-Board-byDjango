@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Jobs,Category
+from .models import Jobs,Category,Apllyjob
 from django.core.paginator import Paginator
-
+from .forms import Applyform
 # Create your views here.
 
 
@@ -32,7 +32,20 @@ def all_jobs(request):
 
 def job_detalis(request,id):
     job = Jobs.objects.get(id = id)
+
+    if request.method == 'POST':
+        form = Applyform(request.POST, request.FILES)
+        print('before valid')
+        if form.is_valid():
+            print('valid')
+            myform = form.save(commit=False)
+            myform.job = job
+            myform.save()
+    else:
+        form = Applyform()
+   
     context={
-        'job': job
+        'job': job,
+        'form': form, 
     }
     return render(request,'job_details.html',context)
